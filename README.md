@@ -4,6 +4,9 @@
 ## build
 
     npm install
-    browserify main.js > main-bundle.js
 
+
+## run
+
+   node app.js
     
