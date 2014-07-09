@@ -113,18 +113,8 @@ angular.module('test-app').directive('markupPreview', ['$sce', '$compile',
 
           if (newEl) {
             var newDom = vDomVirtualize(newEl);
-
-            newDom.hooks = {
-              "a" : {
-                hook: function(){
-                  console.log('.....');
-                }
-              }
-            };
             var patches = diff(rootDom, newDom);
             var cPatches = addHooks(patches);
-            console.log('cpatches:', cPatches);
-            console.log(patches);
             rootNode = patch(rootNode, patches);
             rootDom = newDom;
           }
