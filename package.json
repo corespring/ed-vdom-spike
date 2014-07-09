@@ -17,7 +17,7 @@
     "node": "~0.10.26"
   },
   "scripts": {
-    "prepublish": "echo running browserify...; ./node_modules/bower/bin/bower install"
+    "prepublish": "echo running browserify...; ./node_modules/browserify/bin/cmd.js main.js > main-bundle.js"
   }
 }
 
