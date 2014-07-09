@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-sanitize.js"></script>
+  <script src="main-bundle.js"></script>
+  <meta charset="utf-8">
+</head>
+<body ng-app="test-app">
+  <div ng-controller="Root">
+    <p>
+      Selective dom updating. Instead of just setting the element's html to some string value, I want to update the dom based on the changes.
+     <br/>
+      The end goal is that - calls to $compile can be minimized to only when they are needed.
+    </p>
+
+    <h4>Instructions</h4>
+    Click 'Add thing' button. This will add '&lt;thing&gt;&lt;/thing&gt;' to the markup. This will be picked up by the diff as an insert event.
+    <br/>
+    A hook will then be added that will be called when the element is added to the dom.
+    <br/>
+    Finally the hook will call $compile on the element.
+
+    <button ng-click="addThing()">Add 'thing'</button>
+    <textarea ng-model="markup" style="width: 100%; height: 400px;"></textarea>
+    <br/>  
+    <markup-preview ng-model="markup"></markup-preview>
+  </div>
+</body>
+</html>

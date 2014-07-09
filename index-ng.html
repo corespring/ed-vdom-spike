@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2014 by edeustace (http://jsbin.com/birin/2/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<head>
+
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-sanitize.js"></script>
+  <script src="main.js"></script>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+
+<style id="jsbin-css">
+
+</style>
+</head>
+<body ng-app="test-app">
+  <div ng-controller="Root">
+    <p>
+      Selective dom updating. Instead of just setting the element's html to some string value, I want to update the dom based on the changes.
+      
+      <br/>
+      The end goal is that - calls to $compile can be minimized to only when they are needed.
+    </p>
+    <br/>
+    <textarea ng-model="markup"></textarea>
+    <br/>  
+    <markup-preview ng-model="markup"></markup-preview>
+  </div>
+
+<script>
+
+ 
+// 1: Create a function that declares what the DOM should look like
+function render(count)  {
+    return h('div', {
+        style: {
+            textAlign: 'center',
+            verticalAlign: 'center',
+            lineHeight: (100 + count) + 'px', 
+            border: '1px solid red',
+            width: (100 + count) + 'px',
+            height: (100 + count) + 'px'
+        }
+    }, [String(count)]);
+}
+ 
+// 2: Initialise the document
+var count = 0;      // We need some app data. Here we just store a count.
+ 
+var tree = render(count);               // We need an initial tree
+var rootNode = createElement(tree);     // Create an initial root DOM node ...
+document.body.appendChild(rootNode);    // ... and it should be in the document
+ 
+// 3: Wire up the update logic
+setInterval(function () {
+      count++;
+      
+      var newTree = render(count);
+      var patches = diff(tree, newTree);
+      rootNode = patch(rootNode, patches);
+      tree = newTree;
+}, 1000);
+
+
+angular.module('test-app',  ['ngSanitize']);
+
+angular.module('test-app').controller('Root', function($scope){
+  $scope.markup = '<h1>hi</h1>';
+});
+
+angular.module('test-app').
+  directive('markupPreview', ['$sce', function($sce) {
+    return {
+      restrict: 'E', 
+      require: '?ngModel', 
+      link: function(scope, element, attrs, ngModel) {
+        if(!ngModel) return; 
+        
+        /**
+         * Update the dom using the latest $viewValue
+         */
+        ngModel.$render = function() {
+          element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+        };
+
+      }
+    };
+  }]);
+</script>
+</body>
+</html>

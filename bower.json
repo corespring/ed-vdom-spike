@@ -1,0 +1,6 @@
+{
+  "name": "vdom-works",
+  "dependencies": {
+    "virtual-dom": "git@github.com:Matt-Esch/virtual-dom.git"
+  }
+}
